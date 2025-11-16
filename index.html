@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>صفحة دخول - لوحات الدوريات</title>
+  <style>
+    :root{
+      --bg:#0b132b;
+      --card:#1c2541;
+      --accent:#4ac1ff;
+      --glow:#4ac1ff44;
+      --muted:#a1b2c3;
+      --shadow:0 8px 30px rgba(0,0,0,0.7);
+      --radius:16px;
+      --font-title:'Segoe UI', Tahoma, Arial;
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family: var(--font-title);
+      background: linear-gradient(135deg, #0b132b 0%, #090f2c 100%);
+      color:#e8f4ff;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:0;
+    }
+
+    /* الهيدر */
+    header{
+      width:100%;
+      text-align:center;
+      padding:30px 15px;
+      background:rgba(255,255,255,0.03);
+      border-bottom:1px solid rgba(255,255,255,0.1);
+      box-shadow:0 4px 20px rgba(0,0,0,0.5);
+    }
+    header h1{
+      font-size:32px;
+      font-weight:700;
+      margin:0;
+      color:var(--accent);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+
+    main{
+      width:100%;
+      max-width:920px;
+      margin-top:30px;
+      padding:20px;
+    }
+
+    .card{
+      position: relative;
+      width:100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:32px;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:30px;
+      overflow:hidden;
+    }
+
+    /* اللوجو الكبير كخلفية */
+    .card::before {
+      content:"";
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      width:300px;
+      height:300px;
+      background:url('logo.png') no-repeat center center;
+      background-size:contain;
+      opacity:0.08;
+      pointer-events:none;
+    }
+
+    /* اللوجو الصغير أعلى الشمال داخل الكارد */
+    .logo-top-left {
+      position:absolute;
+      top:15px;
+      left:15px;
+      width:100px;
+      height:100px;
+      background:url('logo.png') no-repeat center center;
+      background-size:contain;
+      opacity:1;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:18px;
+      padding:14px;
+      position:relative;
+      z-index:2; /* لضمان ظهور المحتوى فوق الخلفية */
+    }
+
+    .brand h1{
+      font-size:22px;
+      margin:0;
+      font-weight:600;
+      color:#fff;
+      text-align:center;
+    }
+    .designer{
+      font-size:14px;
+      color:var(--muted);
+      text-align:center;
+    }
+    .desc{
+      font-size:14px;
+      color:var(--muted);
+      text-align:center;
+      padding:0 6px;
+      line-height:1.5;
+    }
+
+    form{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      position:relative;
+      z-index:2;
+    }
+    label{
+      font-size:14px;
+      color:var(--muted);
+    }
+    input[type=text], input[type=password], select{
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.05);
+      background:rgba(255,255,255,0.02);
+      color:#e8f4ff;
+    }
+    .row{display:flex;gap:14px;}
+    .btn{
+      padding:12px 16px;
+      border-radius:12px;
+      border:none;
+      background:var(--accent);
+      color:#042028;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+      box-shadow:0 4px 15px var(--glow);
+    }
+    .btn:hover{box-shadow:0 6px 20px var(--glow);}
+    .secondary{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      color:var(--muted);
+      border-radius:12px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+    .secondary:hover{background:rgba(255,255,255,0.03);}
+    .selections{
+      background:rgba(255,255,255,0.02);
+      padding:14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .sports-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .sports-list label{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      cursor:pointer;
+    }
+    .summary{
+      margin-top:12px;
+      padding:12px;
+      border-radius:10px;
+      background:rgba(0,0,0,0.25);
+      font-size:14px;
+    }
+
+    footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      margin-top:20px;
+      position:relative;
+      z-index:2;
+    }
+
+    @media(max-width:600px){
+      .row{flex-direction:column;}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>لجنة الأنشطة والمسابقات</h1>
+  </header>
+
+  <main>
+    <div class="card">
+      <!-- لوجو صغير أعلى الشمال -->
+      <div class="logo-top-left"></div>
+
+      <aside class="brand">
+        <h1>لوحة الدوريات</h1>
+        <div class="designer">المصمم: <strong id="designerName">اسم المصمم</strong></div>
+        <div class="desc">اختار الدوري اللي تحب تتابعه - كرة قدم، بنج بونج، شطرنج. تقدر تختار أكتر من واحد.</div>
+      </aside>
+
+      <section>
+        <form id="loginForm" autocomplete="off">
+          <div class="row">
+            <div style="flex:1">
+              <label for="username">اسم المستخدم</label>
+              <input id="username" name="username" type="text" placeholder="اكتب اسم المستخدم" required />
+            </div>
+            <div style="width:140px">
+              <label for="lang">اللغة</label>
+              <select id="lang">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="password">كلمة المرور</label>
+            <input id="password" name="password" type="password" placeholder="كلمة المرور" required />
+          </div>
+
+          <div class="selections">
+            <label>اختر الدوريات / الألعاب</label>
+            <div class="sports-list">
+              <label><input type="checkbox" name="sports" value="football" /> دوري كرة القدم</label>
+              <label><input type="checkbox" name="sports" value="pingpong" /> دوري البنج بونج</label>
+              <label><input type="checkbox" name="sports" value="chess" /> دوري الشطرنج</label>
+            </div>
+            <div class="summary" id="selectionSummary">لم تختار أي دوري بعد.</div>
+          </div>
+
+          <div style="display:flex;gap:12px;margin-top:6px">
+            <button class="btn" type="submit">دخول</button>
+			 <button class="btn" type="button" onclick="window.location.href='supervisor.html'">المشرفين</button>
+            <button class="secondary" type="button" id="clearBtn">مسح الاختيارات</button>
+          </div>
+        </form>
+
+        <div style="margin-top:18px;color:var(--muted);font-size:13px">
+          ملاحظة: هذه صفحة واجهة جاهزة للعرض محلياً. لو حابب أوصلها بقاعدة بيانات (Firebase, Supabase...) أو أضيف تسجيل حقيقي، أقولك أعمل إيه.
+        </div>
+      </section>
+
+      <footer>حقوق التصميم محفوظة — تغيير الشعار والاسم في الكود</footer>
+    </div>
+  </main>
+
+  <script>
+    const designerNameEl = document.getElementById('designerName');
+    const designer = 'لجنة الأنشطة والمسابقات';
+    designerNameEl.textContent = designer;
+
+    const summary = document.getElementById('selectionSummary');
+    function updateSummary(){
+      const checked = Array.from(document.querySelectorAll('input[name="sports"]:checked')).map(i=>i.value);
+      if(checked.length===0){ summary.textContent = 'لم تختار أي دوري بعد.'; return }
+      const map = {football:'كرة القدم', pingpong:'البنج بونج', chess:'الشطرنج'};
+      summary.textContent = 'مختار: ' + checked.map(v=>map[v]||v).join(' ، ');
+    }
+    document.querySelectorAll('input[name="sports"]').forEach(i=>i.addEventListener('change', updateSummary));
+    updateSummary();
+
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pw = document.getElementById('password').value;
+      const checked = Array.from(document.querySelectorAll('input[name="sports"]:checked')).map(i=>i.value);
+      if(!user || !pw){ alert('كمل اسم المستخدم وكلمة المرور'); return }
+      if(checked.length===0){
+        if(!confirm('لم تختار أي دوري. تواصل بدون اختيار؟')) return;
+      }
+      if(checked.includes('football')){
+        window.location.href = 'https://dividmores-maker.github.io/maro-h/';
+        return;
+      }
+      alert(`مرحباً ${user}!\nلا يوجد انتقال محدد لهذا الاختيار.`);
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      document.querySelectorAll('input[name="sports"]').forEach(i=>i.checked=false); 
+      updateSummary();
+    });
+  </script>
+</body>
+</html>
