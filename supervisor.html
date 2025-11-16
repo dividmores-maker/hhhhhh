@@ -491,7 +491,8 @@
 
     <div class="nav">
       <button class="nav-btn" onclick="showPage('register')">➕ تسجيل مشرف جديد</button>
-      <button class="nav-btn secondary" onclick="requestPasswordForList()">📋 عرض السجلات</button>
+      <button class="nav-btn secondary" onclick="showPage('view')">👁️ السجلات</button>
+      <button class="nav-btn secondary" onclick="requestPasswordForList()">🔐 عرض السجلات</button>
       <button class="nav-btn secondary" onclick="showPage('home')">🏠 الرئيسية</button>
     </div>
 
@@ -569,6 +570,22 @@
         </div>
 
         <div id="supervisorsList"></div>
+      </div>
+    </div>
+
+    <div id="viewPage" class="page">
+      <div class="card">
+        <div style="margin-bottom: 20px;">
+          <h2 style="color: #4ac1ff; margin: 0;">👁️ عرض السجلات</h2>
+          <p style="color: #a1b2c3; margin-top: 10px; font-size: 14px;">عرض فقط - بدون صلاحيات التعديل أو الحذف</p>
+        </div>
+
+        <div class="loading" id="loadingIndicatorView">
+          <div class="spinner"></div>
+          <p>جاري تحميل البيانات...</p>
+        </div>
+
+        <div id="supervisorsViewList"></div>
       </div>
     </div>
   </div>
@@ -667,6 +684,9 @@
       } else if (pageName === 'list') {
         document.getElementById('listPage').classList.add('active');
         displaySupervisors();
+      } else if (pageName === 'view') {
+        document.getElementById('viewPage').classList.add('active');
+        displaySupervisorsViewOnly();
       }
     }
 
@@ -807,6 +827,97 @@
               <td>
                 <button class="delete-btn" onclick="deleteSupervisor('${docSnapshot.id}')">🗑️ حذف</button>
               </td>
+            </tr>
+          `;
+        });
+
+        tableHTML += `
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        listContainer.innerHTML = tableHTML;
+        
+      } catch (error) {
+        console.error('Error displaying supervisors:', error);
+        loadingIndicator.classList.remove('show');
+        listContainer.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <p style="color: #ff4a4a;">حدث خطأ في تحميل البيانات</p>
+            <p style="font-size: 14px; margin-top: 10px;">${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    async function displaySupervisorsViewOnly() {
+      const listContainer = document.getElementById('supervisorsViewList');
+      const loadingIndicator = document.getElementById('loadingIndicatorView');
+      
+      try {
+        loadingIndicator.classList.add('show');
+        listContainer.innerHTML = '';
+
+        const q = query(collection(window.db, 'supervisors'), orderBy('createdAt', 'desc'));
+        const snapshot = await getDocs(q);
+
+        loadingIndicator.classList.remove('show');
+
+        if (snapshot.empty) {
+          listContainer.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">🔭</div>
+              <p>لا توجد سجلات بعد</p>
+              <p style="font-size: 14px; margin-top: 10px;">قم بتسجيل مشرف جديد للبدء</p>
+            </div>
+          `;
+          return;
+        }
+
+        let tableHTML = `
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>الاسم</th>
+                  <th>السن</th>
+                  <th>الكنيسة</th>
+                  <th>اللعبة</th>
+                  <th>الهاتف</th>
+                  <th>تاريخ التسجيل</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        snapshot.forEach(docSnapshot => {
+          const data = docSnapshot.data();
+          const date = data.createdAt.toDate();
+          const formattedDate = date.toLocaleDateString('ar-EG', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+          const formattedTime = date.toLocaleTimeString('ar-EG', {
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+
+          let gameIcon = '';
+          if (data.game === 'كرة القدم') gameIcon = '⚽';
+          else if (data.game === 'البنج بونج') gameIcon = '🏓';
+          else if (data.game === 'الشطرنج') gameIcon = '♟️';
+
+          tableHTML += `
+            <tr>
+              <td><strong>${data.name}</strong></td>
+              <td>${data.age} سنة</td>
+              <td>${data.church}</td>
+              <td><span style="font-size: 20px;">${gameIcon}</span> ${data.game}</td>
+              <td>${data.phone || '-'}</td>
+              <td>${formattedDate}<br><small style="color: #a1b2c3;">${formattedTime}</small></td>
             </tr>
           `;
         });
