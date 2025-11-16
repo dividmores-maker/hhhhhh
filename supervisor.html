@@ -424,6 +424,95 @@
       border: 1px solid #4ac1ff;
     }
 
+    .filter-section {
+      background: rgba(74, 193, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(74, 193, 255, 0.1);
+    }
+
+    .filter-title {
+      color: #4ac1ff;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .filter-input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: #e8f4ff;
+      font-size: 14px;
+    }
+
+    .filter-input:focus {
+      outline: none;
+      border-color: #4ac1ff;
+      box-shadow: 0 0 10px rgba(74, 193, 255, 0.2);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: bold;
+    }
+
+    .filter-btn.search {
+      background: #4ac1ff;
+      color: #042028;
+    }
+
+    .filter-btn.search:hover {
+      background: #79d4ff;
+    }
+
+    .filter-btn.reset {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #a1b2c3;
+    }
+
+    .filter-btn.reset:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .results-count {
+      color: #a1b2c3;
+      font-size: 14px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: rgba(74, 193, 255, 0.05);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .results-count strong {
+      color: #4ac1ff;
+      font-size: 16px;
+    }
+
     @media (max-width: 768px) {
       .logo-corner {
         width: 60px;
@@ -492,7 +581,7 @@
     <div class="nav">
       <button class="nav-btn" onclick="showPage('register')">➕ تسجيل مشرف جديد</button>
       <button class="nav-btn secondary" onclick="showPage('view')">👁️ السجلات</button>
-      <button class="nav-btn secondary" onclick="requestPasswordForList()">🔐 عرض السجلات</button>
+      <button class="nav-btn secondary" onclick="requestPasswordForList()">🔒 عرض السجلات</button>
       <button class="nav-btn secondary" onclick="showPage('home')">🏠 الرئيسية</button>
     </div>
 
@@ -564,6 +653,29 @@
           <button class="delete-btn" onclick="clearAllData()" style="width: auto;">🗑️ مسح جميع السجلات</button>
         </div>
 
+        <div class="filter-section">
+          <div class="filter-title">
+            🔍 البحث والتصفية
+          </div>
+          <div class="filter-grid">
+            <input type="text" id="filterName" class="filter-input" placeholder="البحث بالاسم">
+            <input type="text" id="filterChurch" class="filter-input" placeholder="البحث بالكنيسة">
+            <select id="filterGame" class="filter-input">
+              <option value="">كل الألعاب</option>
+              <option value="كرة القدم">⚽ كرة القدم</option>
+              <option value="البنج بونج">🏓 البنج بونج</option>
+              <option value="الشطرنج">♟️ الشطرنج</option>
+            </select>
+            <input type="tel" id="filterPhone" class="filter-input" placeholder="البحث بالهاتف">
+          </div>
+          <div class="filter-buttons">
+            <button class="filter-btn search" onclick="applyFilter()">🔍 بحث</button>
+            <button class="filter-btn reset" onclick="resetFilter()">🔄 إعادة تعيين</button>
+          </div>
+        </div>
+
+        <div class="results-count" id="resultsCount" style="display: none;"></div>
+
         <div class="loading" id="loadingIndicator">
           <div class="spinner"></div>
           <p>جاري تحميل البيانات...</p>
@@ -579,6 +691,29 @@
           <h2 style="color: #4ac1ff; margin: 0;">👁️ عرض السجلات</h2>
           <p style="color: #a1b2c3; margin-top: 10px; font-size: 14px;">عرض فقط - بدون صلاحيات التعديل أو الحذف</p>
         </div>
+
+        <div class="filter-section">
+          <div class="filter-title">
+            🔍 البحث والتصفية
+          </div>
+          <div class="filter-grid">
+            <input type="text" id="filterNameView" class="filter-input" placeholder="البحث بالاسم">
+            <input type="text" id="filterChurchView" class="filter-input" placeholder="البحث بالكنيسة">
+            <select id="filterGameView" class="filter-input">
+              <option value="">كل الألعاب</option>
+              <option value="كرة القدم">⚽ كرة القدم</option>
+              <option value="البنج بونج">🏓 البنج بونج</option>
+              <option value="الشطرنج">♟️ الشطرنج</option>
+            </select>
+            <input type="tel" id="filterPhoneView" class="filter-input" placeholder="البحث بالهاتف">
+          </div>
+          <div class="filter-buttons">
+            <button class="filter-btn search" onclick="applyFilterView()">🔍 بحث</button>
+            <button class="filter-btn reset" onclick="resetFilterView()">🔄 إعادة تعيين</button>
+          </div>
+        </div>
+
+        <div class="results-count" id="resultsCountView" style="display: none;"></div>
 
         <div class="loading" id="loadingIndicatorView">
           <div class="spinner"></div>
@@ -760,6 +895,7 @@
     async function displaySupervisors() {
       const listContainer = document.getElementById('supervisorsList');
       const loadingIndicator = document.getElementById('loadingIndicator');
+      const resultsCount = document.getElementById('resultsCount');
       
       try {
         loadingIndicator.classList.add('show');
@@ -771,6 +907,7 @@
         loadingIndicator.classList.remove('show');
 
         if (snapshot.empty) {
+          resultsCount.style.display = 'none';
           listContainer.innerHTML = `
             <div class="empty-state">
               <div class="empty-state-icon">🔭</div>
@@ -779,6 +916,43 @@
             </div>
           `;
           return;
+        }
+
+        const filterName = (document.getElementById('filterName')?.value || '').toLowerCase().trim();
+        const filterChurch = (document.getElementById('filterChurch')?.value || '').toLowerCase().trim();
+        const filterGame = document.getElementById('filterGame')?.value || '';
+        const filterPhone = (document.getElementById('filterPhone')?.value || '').trim();
+
+        let filteredData = [];
+        snapshot.forEach(docSnapshot => {
+          const data = docSnapshot.data();
+          
+          if (filterName && !data.name.toLowerCase().includes(filterName)) return;
+          if (filterChurch && !data.church.toLowerCase().includes(filterChurch)) return;
+          if (filterGame && data.game !== filterGame) return;
+          if (filterPhone && !(data.phone || '').includes(filterPhone)) return;
+          
+          filteredData.push({ id: docSnapshot.id, data: data });
+        });
+
+        if (filteredData.length === 0) {
+          resultsCount.style.display = 'none';
+          listContainer.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">🔍</div>
+              <p>لا توجد نتائج مطابقة للبحث</p>
+              <p style="font-size: 14px; margin-top: 10px;">جرب تغيير معايير البحث</p>
+            </div>
+          `;
+          return;
+        }
+
+        const hasFilters = filterName || filterChurch || filterGame || filterPhone;
+        if (hasFilters) {
+          resultsCount.style.display = 'block';
+          resultsCount.innerHTML = `تم العثور على <strong>${filteredData.length}</strong> نتيجة من أصل <strong>${snapshot.size}</strong> سجل`;
+        } else {
+          resultsCount.style.display = 'none';
         }
 
         let tableHTML = `
@@ -798,8 +972,8 @@
               <tbody>
         `;
 
-        snapshot.forEach(docSnapshot => {
-          const data = docSnapshot.data();
+        filteredData.forEach(item => {
+          const data = item.data;
           const date = data.createdAt.toDate();
           const formattedDate = date.toLocaleDateString('ar-EG', {
             year: 'numeric',
@@ -825,7 +999,7 @@
               <td>${data.phone || '-'}</td>
               <td>${formattedDate}<br><small style="color: #a1b2c3;">${formattedTime}</small></td>
               <td>
-                <button class="delete-btn" onclick="deleteSupervisor('${docSnapshot.id}')">🗑️ حذف</button>
+                <button class="delete-btn" onclick="deleteSupervisor('${item.id}')">🗑️ حذف</button>
               </td>
             </tr>
           `;
@@ -855,6 +1029,7 @@
     async function displaySupervisorsViewOnly() {
       const listContainer = document.getElementById('supervisorsViewList');
       const loadingIndicator = document.getElementById('loadingIndicatorView');
+      const resultsCount = document.getElementById('resultsCountView');
       
       try {
         loadingIndicator.classList.add('show');
@@ -866,6 +1041,7 @@
         loadingIndicator.classList.remove('show');
 
         if (snapshot.empty) {
+          resultsCount.style.display = 'none';
           listContainer.innerHTML = `
             <div class="empty-state">
               <div class="empty-state-icon">🔭</div>
@@ -874,6 +1050,43 @@
             </div>
           `;
           return;
+        }
+
+        const filterName = (document.getElementById('filterNameView')?.value || '').toLowerCase().trim();
+        const filterChurch = (document.getElementById('filterChurchView')?.value || '').toLowerCase().trim();
+        const filterGame = document.getElementById('filterGameView')?.value || '';
+        const filterPhone = (document.getElementById('filterPhoneView')?.value || '').trim();
+
+        let filteredData = [];
+        snapshot.forEach(docSnapshot => {
+          const data = docSnapshot.data();
+          
+          if (filterName && !data.name.toLowerCase().includes(filterName)) return;
+          if (filterChurch && !data.church.toLowerCase().includes(filterChurch)) return;
+          if (filterGame && data.game !== filterGame) return;
+          if (filterPhone && !(data.phone || '').includes(filterPhone)) return;
+          
+          filteredData.push({ id: docSnapshot.id, data: data });
+        });
+
+        if (filteredData.length === 0) {
+          resultsCount.style.display = 'none';
+          listContainer.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">🔍</div>
+              <p>لا توجد نتائج مطابقة للبحث</p>
+              <p style="font-size: 14px; margin-top: 10px;">جرب تغيير معايير البحث</p>
+            </div>
+          `;
+          return;
+        }
+
+        const hasFilters = filterName || filterChurch || filterGame || filterPhone;
+        if (hasFilters) {
+          resultsCount.style.display = 'block';
+          resultsCount.innerHTML = `تم العثور على <strong>${filteredData.length}</strong> نتيجة من أصل <strong>${snapshot.size}</strong> سجل`;
+        } else {
+          resultsCount.style.display = 'none';
         }
 
         let tableHTML = `
@@ -892,8 +1105,8 @@
               <tbody>
         `;
 
-        snapshot.forEach(docSnapshot => {
-          const data = docSnapshot.data();
+        filteredData.forEach(item => {
+          const data = item.data;
           const date = data.createdAt.toDate();
           const formattedDate = date.toLocaleDateString('ar-EG', {
             year: 'numeric',
@@ -941,6 +1154,30 @@
           </div>
         `;
       }
+    }
+
+    function applyFilter() {
+      displaySupervisors();
+    }
+
+    function resetFilter() {
+      document.getElementById('filterName').value = '';
+      document.getElementById('filterChurch').value = '';
+      document.getElementById('filterGame').value = '';
+      document.getElementById('filterPhone').value = '';
+      displaySupervisors();
+    }
+
+    function applyFilterView() {
+      displaySupervisorsViewOnly();
+    }
+
+    function resetFilterView() {
+      document.getElementById('filterNameView').value = '';
+      document.getElementById('filterChurchView').value = '';
+      document.getElementById('filterGameView').value = '';
+      document.getElementById('filterPhoneView').value = '';
+      displaySupervisorsViewOnly();
     }
 
     async function deleteSupervisor(id) {
